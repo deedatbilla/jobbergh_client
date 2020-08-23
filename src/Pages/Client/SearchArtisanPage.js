@@ -35,7 +35,7 @@ class SearchArtisanPage extends Component {
       // console.log(temp)
       return (
         <div className="">
-      <SecondaryHeader />
+      <SecondaryHeader auth={this.props.firebase.auth()} />
 
       <div className="container-fluid p-4">
         <div className="row mb-5 mt-1">

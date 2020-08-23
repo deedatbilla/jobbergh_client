@@ -137,7 +137,7 @@ class DashboardContent extends Component {
                           <div className="icon p-3">
                             <i className="fa fa-tasks fa-lg text-warning" style={{ fontSize: "50px" }}></i>
                           </div>
-                          <Link to="/search" className="btn btn-success p-2 ">Request a service</Link>
+                          <Link to="/service-type" className="btn btn-success p-2 ">Request a service</Link>
                         </div>
                       </div>
                     </div>

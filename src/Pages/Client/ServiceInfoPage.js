@@ -137,7 +137,7 @@ const ServiceInfoPage = (props) => {
     const user = props.firebase.auth().currentUser;
     try {
       if (firebase.auth().currentUser !== null) {
-        // if (reviews) {
+        if (reviews.length>0) {
         // console.log("Sd")
         for(var i=0;i<reviews.length;i++){
           if(reviews[i].reviewerid===user.uid){
@@ -157,12 +157,30 @@ const ServiceInfoPage = (props) => {
                 timestamp: new Date().getTime(),
               }
             );
+            setComment("")
             alert("success");
             break
           }
         }
         
-        // }
+        }
+        else{
+          await firestore.add(
+            { collection: "reviews" },
+            {
+              artisanid: JSON.parse(props.match.params.data).id,
+              reviewerid: user.uid,
+              reviewerName: user.displayName,
+              PhotoURL: user.photoURL,
+              comment: comment,
+              rating: rating,
+              timestamp: new Date().getTime(),
+            }
+          );
+          setComment("")
+          alert("success");
+        }
+        
       } else {
         history.push("/client/login");
       }

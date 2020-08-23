@@ -32,7 +32,7 @@ class DashboardSideBar extends Component {
     const { isAuthenticated } = this.state;
     const { auth } = this.props;
     return (
-      <aside className="main-sidebar sidebar-light-primary">
+      <aside className="main-sidebar sidebar-light-primary elevation-4">
         {/* <!-- Brand Logo --> */}
         <Link to="/" className="brand-link">
           {/* <img
@@ -66,20 +66,20 @@ class DashboardSideBar extends Component {
           <nav className="mt-2">
             <ul className="nav nav-pills nav-sidebar ">
               <li className="nav-item">
-                <Link to="/dashboard" className="nav-link">
+                <Link to="/client/dashboard" className="nav-link">
                   <i className="nav-icon fa fa-home"></i>
                   <p>Dashboard</p>
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/portfolio" className="nav-link">
-                  <i className="nav-icon fa fa-file"></i>
+                <Link to="/client/profile" className="nav-link">
+                  <i className="nav-icon fa fa-user"></i>
                   <p>Profile</p>
                 </Link>
                 
               </li>
               <li className="nav-item">
-                <Link to="/edit-profile" className="nav-link">
+                <Link to="/manage-requests" className="nav-link">
                   <i className="nav-icon fa fa-tasks"></i>
                   <p>Manage requests</p>
                 </Link>

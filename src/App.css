@@ -11,3 +11,6 @@
   -ms-flex-pack: center;
   justify-content: center;
 }
+.service-type-card:hover{
+  border: 2px solid blue;
+}

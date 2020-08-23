@@ -36,17 +36,22 @@ const ArtisanCard = (props) => {
         <div class="card-body">
           <div className="container">
             <div className="row">
+              <div className="col-md-2">
               <img src={artisan} height={30} width={40} className="rounded-circle" alt="user profile" />
-              <h4 class="card-title">
+              </div>
+              <div className="col">
+              <h6 class="text-muted">
                 {fname} {lname}
-              </h4>
+              </h6>
+              {/* {[5,7,8].map(data=>(<i class="fa fa-star-o " aria-hidden="true"></i>))} */}
+              </div>
             </div>
             <div className="row mt-1 p-2">
               <p class="card-text">{bio}</p>
             </div>
 
             <div className="row mt-1 p-2">
-           {[5,7,8].map(data=>(<i class="fa fa-star-o p-1" aria-hidden="true"></i>))}
+           
             </div>
           </div>
           <Link to={`/service/${JSON.stringify({id:id,service:props.match})}`} class="btn  bg-orange text-white">
