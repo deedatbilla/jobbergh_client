@@ -23,11 +23,10 @@ class ClientRootComponent extends Component {
             <Route exact path="/client/dashboard" component={UserIsAuthenticated(ClientDashboard)} />
             {/* <Route exact path="/search/:artisan" component={UserIsAuthenticated(SearchArtisanPage)} /> */}
             <Route exact path="/search/:artisan" component={SearchArtisanPage} />
-            <Route exact path="/service-type" component={SelectServiceTypePage} />
-            <Route exact path="/client/profile" component={ProfilePage} />
-
+            <Route exact path="/service-type" component={UserIsAuthenticated(SelectServiceTypePage)} />
+            <Route exact path="/client/profile" component={UserIsAuthenticated(ProfilePage)} />
             <Route exact path="/service/:data" component={ServiceInfoPage} />
-            <Route exact path="/manage-requests" component={ManageRequestsPage} />
+            <Route exact path="/manage-requests" component={UserIsAuthenticated(ManageRequestsPage)} />
           </Switch>
         </Router>
       </div>
