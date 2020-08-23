@@ -7,6 +7,7 @@ import ClientLoginPage from './ClientLoginPage';
 import ClientRegisterPage from './ClientRegisterPage';
 import ClientDashboard from './ClientDashboard';
 import SearchArtisanPage from './SearchArtisanPage';
+import ServiceInfoPage from './ServiceInfoPage';
 class ClientRootComponent extends Component {
   render() {
     return (
@@ -17,7 +18,12 @@ class ClientRootComponent extends Component {
             <Route exact path="/client/login" component={UserIsNotAuthenticated(ClientLoginPage)} />
             <Route exact path="/client/register" component={UserIsNotAuthenticated(ClientRegisterPage)} />
             <Route exact path="/client/dashboard" component={UserIsAuthenticated(ClientDashboard)} />
-            <Route exact path="/search/:artisan" component={UserIsNotAuthenticated(SearchArtisanPage)} />
+            {/* <Route exact path="/search/:artisan" component={UserIsAuthenticated(SearchArtisanPage)} /> */}
+            <Route exact path="/search/:artisan" component={SearchArtisanPage} />
+            <Route exact path="/search" component={SearchArtisanPage} />
+            
+            <Route exact path="/service/:data" component={ServiceInfoPage} />
+           
           </Switch>
         </Router>
       </div>

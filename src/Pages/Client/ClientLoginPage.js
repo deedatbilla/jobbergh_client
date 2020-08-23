@@ -107,7 +107,7 @@ class LoginPage extends Component {
                     <div className="row">
                       <div className="col-12 text-center">
                         <span>Are you an artisan ?</span>
-                        <a href="https://artisan.jobbergh.com"  className="ml-1">
+                        <a href="http://localhost:3001/"  className="ml-1">
                           Login here
                         </a>
                       </div>

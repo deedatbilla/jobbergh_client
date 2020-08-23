@@ -48,10 +48,11 @@ class ClientRegisterPage extends Component {
             email,
             password,
             displayName: `${fname} ${lname}`,
+          
           })
           .then((data) => {
             // firestore.set({collection:"clients",doc:data.uid})
-            console.log(data);
+            // console.log(data);
           })
           .catch((err) => {
             notifyUser("User Already Exists", "error");

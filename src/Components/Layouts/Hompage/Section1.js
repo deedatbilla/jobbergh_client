@@ -24,7 +24,7 @@ const Section1 = () => {
                 PLUMBER
                 <br />
               </h3>
-              <Link to="/search/plumber" className="btn-arrow bg-navy-blue">
+              <Link to="/search/plumbing" className="btn-arrow bg-navy-blue">
                 <i className="icofont-swoosh-right"></i>
               </Link>
             </div>
@@ -53,7 +53,7 @@ const Section1 = () => {
                 PAINTER
                 <br />
               </h3>
-              <Link to="/search/painter" className="btn-arrow bg-navy-blue">
+              <Link to="/search/painting" className="btn-arrow bg-navy-blue">
                 <i className="icofont-swoosh-right"></i>
               </Link>
             </div>

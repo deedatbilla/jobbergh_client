@@ -19,6 +19,10 @@ import "admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-
 import "admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css";
 import "admin-lte/plugins/chart.js/Chart.min.js";
 import "admin-lte/plugins/moment/moment.min.js";
+import "admin-lte/plugins/jquery-ui/jquery-ui.min.js";
+import "admin-lte/dist/js/pages/dashboard.js";
+import "admin-lte/plugins/jquery/jquery.min.js";
+import "admin-lte/dist/js/adminlte.js";
 import NotFound from './Pages/NotFound';
 import ClientRootComponent from "./Pages/Client/ClientRootComponent";
 function App() {
