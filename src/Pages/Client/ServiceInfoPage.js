@@ -9,10 +9,10 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import { firebaseConnect, firestoreConnect } from "react-redux-firebase";
 import { Modal, Button } from "react-bootstrap";
-import { BASE_URL } from "../../config";
+import { BASE_URL, JOBBERGH_BASE_URL } from "../../config";
 import { Carousel } from "react-bootstrap";
-import avatar from '../../images/avatar.webp';
-import DashBoardHeader from '../../Components/DashBoardHeader';
+import avatar from "../../images/avatar.webp";
+import DashBoardHeader from "../../Components/DashBoardHeader";
 var periods = {
   month: 30 * 24 * 60 * 60 * 1000,
   week: 7 * 24 * 60 * 60 * 1000,
@@ -32,7 +32,6 @@ const ServiceInfoPage = (props) => {
   const [number_of_rate, setNumber_of_rate] = useState(0);
 
   const handleClose = () => setShow(false);
-
   const handleShow = () => setShow(true);
   const changeRating = (newRating) => {
     setRating(newRating);
@@ -57,7 +56,7 @@ const ServiceInfoPage = (props) => {
   const OnRequestService = async (e) => {
     e.preventDefault();
     const { firebase, history } = props;
-    const { shop_location } = props.artisan;
+    const { shop_location, email } = props.artisan;
     // firebase.auth().currentUser.uid
     // alert(description)
 
@@ -73,7 +72,11 @@ const ServiceInfoPage = (props) => {
           artisan_id: JSON.parse(props.match.params.data).id,
         };
         const response = await axios.post(`${BASE_URL}/createservice/`, payload);
-        console.log(response.data);
+        const notification = await axios.post(`${JOBBERGH_BASE_URL}/api/send-request-notification`, {
+          email,
+          service: JSON.parse(props.match.params.data).service,
+        });
+        console.log(notification.data);
         alert("you have requested for a service");
         setLoading(false);
         handleClose();
@@ -137,34 +140,31 @@ const ServiceInfoPage = (props) => {
     const user = props.firebase.auth().currentUser;
     try {
       if (firebase.auth().currentUser !== null) {
-        if (reviews.length>0) {
-        // console.log("Sd")
-        for(var i=0;i<reviews.length;i++){
-          if(reviews[i].reviewerid===user.uid){
-            alert("you have already left a review for this person");
-            break
+        if (reviews.length > 0) {
+          // console.log("Sd")
+          for (var i = 0; i < reviews.length; i++) {
+            if (reviews[i].reviewerid === user.uid) {
+              alert("you have already left a review for this person");
+              break;
+            } else {
+              await firestore.add(
+                { collection: "reviews" },
+                {
+                  artisanid: JSON.parse(props.match.params.data).id,
+                  reviewerid: user.uid,
+                  reviewerName: user.displayName,
+                  PhotoURL: user.photoURL,
+                  comment: comment,
+                  rating: rating,
+                  timestamp: new Date().getTime(),
+                }
+              );
+              setComment("");
+              alert("success");
+              break;
+            }
           }
-          else{
-            await firestore.add(
-              { collection: "reviews" },
-              {
-                artisanid: JSON.parse(props.match.params.data).id,
-                reviewerid: user.uid,
-                reviewerName: user.displayName,
-                PhotoURL: user.photoURL,
-                comment: comment,
-                rating: rating,
-                timestamp: new Date().getTime(),
-              }
-            );
-            setComment("")
-            alert("success");
-            break
-          }
-        }
-        
-        }
-        else{
+        } else {
           await firestore.add(
             { collection: "reviews" },
             {
@@ -177,10 +177,9 @@ const ServiceInfoPage = (props) => {
               timestamp: new Date().getTime(),
             }
           );
-          setComment("")
+          setComment("");
           alert("success");
         }
-        
       } else {
         history.push("/client/login");
       }
@@ -190,7 +189,7 @@ const ServiceInfoPage = (props) => {
     console.log(props.artisan);
     const fetch = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/getImagesFromWorkPlace/${"sdf"}`);
+        const response = await axios.get(`${BASE_URL}/getImagesFromWorkPlace/${props.match.params.id}`);
         console.log(response.data);
         let temp = [];
         response.data.images.forEach((element) => {
@@ -220,7 +219,7 @@ const ServiceInfoPage = (props) => {
     return (
       <div>
         {ConfirmationModal()}
-         <SecondaryHeader auth={props.firebase.auth()} />
+        <SecondaryHeader auth={props.firebase.auth()} />
 
         <div class="container">
           {/* <!-- Content Header (Page header) --> */}
@@ -252,7 +251,6 @@ const ServiceInfoPage = (props) => {
                   <div class="card card-primary card-outline">
                     <div class="card-body box-profile">
                       <div class="text-center">
-                        
                         <img class="profile-user-img img-fluid img-circle" src={avatar} alt="User profile picture" />
                       </div>
 
@@ -357,37 +355,41 @@ const ServiceInfoPage = (props) => {
                       <div class="tab-content">
                         <div class="active tab-pane" id="activity">
                           {/* <!-- Post --> */}
-                          {props.reviews.length>0?
-                          <React.Fragment>
-                          {props.reviews.map((data) => (
-                            <div class="post">
-                              <div class="user-block">
-                                {data.PhotoURL ? <img class="profile-user-img img-fluid img-circle" src={data.PhotoURL} /> : <img class="profile-user-img img-fluid img-circle" src={avatar} />}
-                                <span class="username">
-                                  <a href="#">{data.reviewerName}</a>
-                                  <span className="float-right">
-                                    <Ratings
-                                      rating={data.rating}
-                                      widgetRatedColors="blue"
-                                      // changeRating={changeRating}
-                                      widgetDimensions="20px"
-                                      widgetSpacings="15px"
-                                      className="float-right"
-                                    >
-                                      <Ratings.Widget widgetSpacing="5px" widgetDimension="15px" />
-                                      <Ratings.Widget widgetSpacing="5px" widgetDimension="15px" />
-                                      <Ratings.Widget widgetSpacing="5px" widgetDimension="15px" />
-                                      <Ratings.Widget widgetSpacing="5px" widgetDimension="15px" />
-                                      <Ratings.Widget widgetSpacing="5px" widgetDimension="15px" />
-                                    </Ratings>
-                                  </span>
-                                </span>
-                                <span class="description">Shared publicly - {formatTime(data.timestamp)}</span>
-                              </div>
-                              {/* <!-- /.user-block --> */}
-                              <p>{data.comment}</p>
+                          {props.reviews.length > 0 ? (
+                            <React.Fragment>
+                              {props.reviews.map((data) => (
+                                <div class="post">
+                                  <div class="user-block">
+                                    {data.PhotoURL ? (
+                                      <img class="profile-user-img img-fluid img-circle" src={data.PhotoURL} />
+                                    ) : (
+                                      <img class="profile-user-img img-fluid img-circle" src={avatar} />
+                                    )}
+                                    <span class="username">
+                                      <a href="#">{data.reviewerName}</a>
+                                      <span className="float-right">
+                                        <Ratings
+                                          rating={data.rating}
+                                          widgetRatedColors="blue"
+                                          // changeRating={changeRating}
+                                          widgetDimensions="20px"
+                                          widgetSpacings="15px"
+                                          className="float-right"
+                                        >
+                                          <Ratings.Widget widgetSpacing="5px" widgetDimension="15px" />
+                                          <Ratings.Widget widgetSpacing="5px" widgetDimension="15px" />
+                                          <Ratings.Widget widgetSpacing="5px" widgetDimension="15px" />
+                                          <Ratings.Widget widgetSpacing="5px" widgetDimension="15px" />
+                                          <Ratings.Widget widgetSpacing="5px" widgetDimension="15px" />
+                                        </Ratings>
+                                      </span>
+                                    </span>
+                                    <span class="description">Shared publicly - {formatTime(data.timestamp)}</span>
+                                  </div>
+                                  {/* <!-- /.user-block --> */}
+                                  <p>{data.comment}</p>
 
-                              {/* <p>
+                                  {/* <p>
                                 <a href="#" class="link-black text-sm mr-2">
                                   <i class="fas fa-share mr-1"></i> Share
                                 </a>
@@ -402,9 +404,12 @@ const ServiceInfoPage = (props) => {
                               </p>
 
                               <input class="form-control form-control-sm" type="text" placeholder="Type a comment" /> */}
-                            </div>
-                          ))}
-                          </React.Fragment>:<p className="text-center">no reviews yet</p>}
+                                </div>
+                              ))}
+                            </React.Fragment>
+                          ) : (
+                            <p className="text-center">no reviews yet</p>
+                          )}
                         </div>
                         {/* <!-- /.tab-pane --> */}
                         <div class="tab-pane" id="timeline">

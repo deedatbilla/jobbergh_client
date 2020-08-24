@@ -11,7 +11,7 @@ const ArtisanCard = (props) => {
     const fetch = async () => {
      
       try {
-        const response = await axios.get(`http://radel.pythonanywhere.com/getImagesFromWorkPlace/${props.data.id}`);
+        const response = await axios.get(`https://radel.pythonanywhere.com/getImagesFromWorkPlace/${props.data.id}`);
         console.log(response.data)
         setimages([...response.data.images])
       } catch (error) {

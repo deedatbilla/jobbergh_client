@@ -12,7 +12,7 @@ import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 class ManageRequestsPage extends Component {
   render() {
     if (this.props.requests) {
-    //   console.log(this.props.firebase.auth().currentUser.uid);
+      //   console.log(this.props.firebase.auth().currentUser.uid);
       return (
         <div>
           {/* <p onClick={this.logout}>textInComponent</p>{" "} */}
@@ -96,42 +96,44 @@ class ManageRequestsPage extends Component {
                                   </td>
                                   <td>{data.type_of_skill}</td>
                                   <td>{new Date(data.datecreated.seconds).toString()}</td>
-                                  <td>
-                                    <span>
-                                      <button
-                                        className="btn btn-danger"
-                                        onClick={async () => {
-                                          const { firestore } = this.props;
-                                          confirmAlert({
-                                            title: "Cancel request",
-                                            message: "Are you sure to cancel this request?.",
-                                            buttons: [
-                                              {
-                                                label: "Yes",
-                                                onClick: async () => {
-                                                  try {
-                                                    await firestore.update(
-                                                      { collection: "ArtisanRequests",doc:data.id},
-                                                      { status: "cancelled" }
-                                                    );
-                                                  } catch (error) {
-                                                    console.log(error.message);
-                                                  }
+                                  {data.status === "pending" ? (
+                                    <td>
+                                      <span>
+                                        <button
+                                          className="btn btn-danger btn-sm"
+                                          onClick={async () => {
+                                            const { firestore } = this.props;
+                                            confirmAlert({
+                                              title: "Cancel request",
+                                              message: "Are you sure to cancel this request?.",
+                                              buttons: [
+                                                {
+                                                  label: "Yes",
+                                                  onClick: async () => {
+                                                    try {
+                                                      await firestore.update(
+                                                        { collection: "ArtisanRequests", doc: data.id },
+                                                        { status: "cancelled" }
+                                                      );
+                                                    } catch (error) {
+                                                      console.log(error.message);
+                                                    }
+                                                  },
                                                 },
-                                              },
-                                              {
-                                                label: "No",
-                                                onClick: () => null,
-                                              },
-                                            ],
-                                          });
-                                          //   await firestore.u
-                                        }}
-                                      >
-                                        Cancel
-                                      </button>
-                                    </span>
-                                  </td>
+                                                {
+                                                  label: "No",
+                                                  onClick: () => null,
+                                                },
+                                              ],
+                                            });
+                                            //   await firestore.u
+                                          }}
+                                        >
+                                          Cancel
+                                        </button>
+                                      </span>
+                                    </td>
+                                  ) : null}
                                 </tr>
                               ))}
                               {/* <tr>
