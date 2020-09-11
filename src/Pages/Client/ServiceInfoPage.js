@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 import SecondaryHeader from "../../Components/SecondaryHeader";
 import Ratings from "react-ratings-declarative";
 import axios from "axios";
-import ph from "../../images/900-darren2x.png";
+// import ph from "../../images/900-darren2x.png";
 import PropTypes from "prop-types";
 import Spinner from "../../Components/Common/Spinner";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firebaseConnect, firestoreConnect } from "react-redux-firebase";
 import { Modal, Button } from "react-bootstrap";
-import { BASE_URL, JOBBERGH_BASE_URL } from "../../config";
-import { Carousel } from "react-bootstrap";
+import { JOBBERGH_BASE_URL } from "../../config";
+// import { Carousel } from "react-bootstrap";
 import avatar from "../../images/avatar.webp";
-import DashBoardHeader from "../../Components/DashBoardHeader";
+// import DashBoardHeader from "../../Components/DashBoardHeader";
 var periods = {
   month: 30 * 24 * 60 * 60 * 1000,
   week: 7 * 24 * 60 * 60 * 1000,
@@ -251,7 +251,7 @@ const ServiceInfoPage = (props) => {
 
   // console.log(shop);
   if (workimages && props.artisan && props.reviews) {
-    const { bio, fname, lname, shop_location, services } = props.artisan;
+    const { bio, fname, lname, shop_location, services, photoURL } = props.artisan;
     // console.log(reviews, "asdsa");
     // calulateOvrRating(props)
     let sum = 0;
@@ -294,7 +294,11 @@ const ServiceInfoPage = (props) => {
                   <div class="card  card-outline" style={{ borderTopColor: "#fe8704", borderTopWidth: "3px" }}>
                     <div class="card-body box-profile">
                       <div class="text-center">
-                        <img class="profile-user-img img-fluid img-circle" src={avatar} alt="User profile picture" />
+                        {!photoURL ? (
+                          <img class="profile-user-img img-fluid img-circle" src={avatar} alt="User profile picture" />
+                        ) : (
+                          <img class="profile-user-img img-fluid img-circle" src={photoURL} alt="User profile picture" />
+                        )}
                       </div>
 
                       <h3 class="profile-username text-center">
@@ -463,7 +467,10 @@ const ServiceInfoPage = (props) => {
 
                               <div class="timeline-item">
                                 <h3 class="timeline-header ">
-                                  <a href="#" style={{color:"#fe8704"}}>My</a> workshop
+                                  <a href="#" style={{ color: "#fe8704" }}>
+                                    My
+                                  </a>{" "}
+                                  workshop
                                 </h3>
 
                                 <div class="timeline-body">
@@ -484,7 +491,10 @@ const ServiceInfoPage = (props) => {
 
                               <div class="timeline-item">
                                 <h3 class="timeline-header">
-                                  <a href="#" style={{color:"#fe8704"}}>My</a> sample works
+                                  <a href="#" style={{ color: "#fe8704" }}>
+                                    My
+                                  </a>{" "}
+                                  sample works
                                 </h3>
 
                                 <div class="timeline-body">
@@ -537,7 +547,7 @@ const ServiceInfoPage = (props) => {
                             </div>
                             <div class="form-group row mt-5">
                               <div class="offset-sm-2 col-sm-10">
-                                <button type="submit" class="btn bg-orange text-white" style={{color:"white"}}>
+                                <button type="submit" class="btn bg-orange text-white" style={{ color: "white" }}>
                                   Submit
                                 </button>
                               </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import artisan from "../images/900-darren2x.png";
+import avatar from "../images/avatar.webp";
 import placeholder from "../images/about_img.png";
 import { Link } from "react-router-dom";
 import { Carousel } from "react-bootstrap";
@@ -39,7 +39,7 @@ const ArtisanCard = (props) => {
     };
     fetch();
   }, []);
-  const { fname, lname, shop_images, id, shop_location, bio } = props.data;
+  const { fname, lname, shop_images, id, shop_location, bio,photoURL } = props.data;
   // console.log(JSON.stringify(shop_images));
   return (
     <div className="col-md-3">
@@ -56,7 +56,11 @@ const ArtisanCard = (props) => {
           <div className="container">
             <div className="row">
               <div className="col-md-2">
-                <img src={artisan} height={30} width={40} className="rounded-circle" alt="user profile" />
+              {!photoURL ? (
+                          <img class="profile-user-img img-fluid img-circle" src={avatar} alt="User profile picture" />
+                        ) : (
+                          <img class="profile-user-img img-fluid img-circle" src={photoURL} alt="User profile picture" />
+                        )}
               </div>
               <div className="col">
                 <h6 class="text-muted">
