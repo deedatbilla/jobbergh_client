@@ -5,7 +5,38 @@ import Section1 from "../Components/Layouts/Hompage/Section1";
 import Section2 from "../Components/Layouts/Hompage/AboutUs";
 import WhyLayout from "../Components/Layouts/Hompage/WhyLayout";
 import Footer from "../Components/Layouts/Hompage/Footer";
-const HomePage = () => {
+import Spinner from "../Components/Common/Spinner";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { firebaseConnect, firestoreConnect } from "react-redux-firebase";
+import PropTypes from "prop-types";
+import ReactSearchBox from "react-search-box";
+import Partners from '../Components/Layouts/Hompage/Partners';
+const data = [
+  {
+    key: "john",
+    value: "John Doe",
+  },
+  {
+    key: "jane",
+    value: "Jane Doe",
+  },
+  {
+    key: "mary",
+    value: "Mary Phillips",
+  },
+  {
+    key: "robert",
+    value: "Robert",
+  },
+  {
+    key: "karius",
+    value: "Karius",
+  },
+];
+const HomePage = ({ services, history }) => {
+  // console.log(props.services)
+
   return (
     <div>
       <Header />
@@ -14,6 +45,7 @@ const HomePage = () => {
         <Section1 />
         <WhyLayout />
         <Section2 />
+        <Partners/>
 
         <Footer />
       </main>
@@ -28,23 +60,22 @@ const HomePage = () => {
                 <i class="icofont-search"></i>
               </div>
               <div class="col-10">
-                <input class="form-control w-100 p-0" type="text" placeholder="Search for an artisan" aria-label="Search" />
+                {services ? (
+                  <ReactSearchBox
+                    placeholder="Find services eg. Painting"
+                    value=""
+                    data={services.map((data) => {
+                      return { key: data.name, value: data.name };
+                    })}
+                    onSelect={(record) => history.push(`search/${record.key}`)}
+                  />
+                ) : null}
+                {/* <input class="form-control w-100 p-0" type="text" placeholder="Search for an artisan" aria-label="Search" /> */}
               </div>
               <div class="col-md-1">
                 <a href="#" class="overlay-close link-oragne">
                   <i class="icofont-close-line"></i>
                 </a>
-              </div>
-            </div>
-            <div className="form-inline">
-              <div className="">
-                {/* <div className="card-body"> */}
-                  <div className="row">
-                    <p>Skills: Capenter</p>
-                  {/* </div> */}
-                </div>
-               
-
               </div>
             </div>
           </div>
@@ -54,4 +85,18 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+HomePage.propTypes = {
+  firebase: PropTypes.object.isRequired,
+  //   artisans: PropTypes.array.isRequired,
+};
+export default compose(
+  firestoreConnect((props) => [
+    // { collection: "users", storeAs: "artisan", doc: JSON.parse(props.match.params.data).id },
+    { collection: "services" },
+  ]),
+  firebaseConnect(),
+  connect(({ firestore: { ordered } }, props) => ({
+    // artisan: ordered.artisan && ordered.artisan[0],
+    services: ordered.services,
+  }))
+)(HomePage);

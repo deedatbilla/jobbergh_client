@@ -83,7 +83,7 @@ const HomeHeader = () => {
             </a>
           </span>
 
-          <div class="d-inline-flex request-btn ml-2 order-lg-last">
+          {/* <div class="d-inline-flex request-btn ml-2 order-lg-last">
             <Link to="/client/login"
               class="btn-theme icon-left bg-orange no-shadow  d-lg-inline-block align-self-center"
               href="#!"
@@ -93,7 +93,7 @@ const HomeHeader = () => {
             >
               <i class="icofont-login"></i> Login
             </Link>
-          </div>
+          </div> */}
           {/* <!-- Topbar Request Quote Start --> */}
 
           {/* <!-- Toggle Button Start --> */}
@@ -156,6 +156,16 @@ const HomeHeader = () => {
                 >
                   Contact 
                 </a>
+               
+              </li>
+              <li class="nav-item dropdown">
+              <Link to="/client/login"
+                  class="nav-link dropdown-toggle-mob"
+                
+                  
+                >
+                  Sign in
+                </Link>
                
               </li>
             </ul>

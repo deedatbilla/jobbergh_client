@@ -1,10 +1,10 @@
 import React from "react";
-import logo from "./logo.svg";
+// import logo from "./logo.svg";
 import "./App.css";
 import { Provider } from "react-redux";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 import { store, rrfProps } from "./store";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+// import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./css/base.css";
 import "./rev-slider/revolution/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css";
 import "./rev-slider/revolution/fonts/font-awesome/css/font-awesome.css";
@@ -23,7 +23,7 @@ import "admin-lte/plugins/jquery-ui/jquery-ui.min.js";
 import "admin-lte/dist/js/pages/dashboard.js";
 import "admin-lte/plugins/jquery/jquery.min.js";
 import "admin-lte/dist/js/adminlte.js";
-import NotFound from './Pages/NotFound';
+// import NotFound from './Pages/NotFound';
 import ClientRootComponent from "./Pages/Client/ClientRootComponent";
 function App() {
   return (
@@ -32,15 +32,7 @@ function App() {
         <div className="App">
         
          <ClientRootComponent/>
-          {/* <Router>
-        
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/artisan" component={ArtisanRootComponent} />
-            <Route exact path="" component={NotFound} />
-          </Switch>
-        
-      </Router> */}
+          
         </div>
       </ReactReduxFirebaseProvider>
     </Provider>

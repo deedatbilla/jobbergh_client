@@ -21,7 +21,8 @@ var periods = {
   minute: 60 * 1000,
 };
 const ServiceInfoPage = (props) => {
-  const [images, setimages] = useState([]);
+  const [workimages, setimages] = useState([]);
+  const [sampleworks, setSampleWorks] = useState([]);
   const [show, setShow] = useState(false);
   const [description, setdescription] = useState("");
   const [location, setlocation] = useState("");
@@ -55,8 +56,8 @@ const ServiceInfoPage = (props) => {
   };
   const OnRequestService = async (e) => {
     e.preventDefault();
-    const { firebase, history } = props;
-    const { shop_location, email } = props.artisan;
+    const { firebase, history, firestore } = props;
+    const { shop_location, email, phone } = props.artisan;
     // firebase.auth().currentUser.uid
     // alert(description)
 
@@ -70,11 +71,17 @@ const ServiceInfoPage = (props) => {
           description: description,
           client_id: firebase.auth().currentUser.uid,
           artisan_id: JSON.parse(props.match.params.data).id,
+          clientPhone: firebase.auth().currentUser.phoneNumber,
+          datecreated: new Date().getTime(),
+          status: "pending",
+          clientEmail: firebase.auth().currentUser.email,
         };
-        const response = await axios.post(`${BASE_URL}/createservice/`, payload);
+        // const response = await axios.post(`${BASE_URL}/createservice/`, payload);
+        await firestore.add({ collection: "ArtisanRequests" }, payload);
         const notification = await axios.post(`${JOBBERGH_BASE_URL}/api/send-request-notification`, {
           email,
           service: JSON.parse(props.match.params.data).service,
+          phone: phone,
         });
         console.log(notification.data);
         alert("you have requested for a service");
@@ -125,7 +132,7 @@ const ServiceInfoPage = (props) => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <button type="submit" className="btn btn-primary text-white">
+            <button type="submit" className="btn bg-orange text-white">
               {!loading ? <span>Confirm</span> : <span>requesting...</span>}
             </button>
           </Modal.Footer>
@@ -186,18 +193,54 @@ const ServiceInfoPage = (props) => {
     } catch (error) {}
   };
   useEffect(() => {
-    console.log(props.artisan);
+    // console.log(props.artisan);
     const fetch = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/getImagesFromWorkPlace/${props.match.params.id}`);
-        console.log(response.data);
-        let temp = [];
-        response.data.images.forEach((element) => {
-          if (!images.includes(element)) {
-            temp.push(element);
-          }
-        });
-        setimages([...temp]);
+        // const response = await axios.get(`${BASE_URL}/getImagesFromWorkPlace/${props.match.params.id}`);
+        // console.log(response.data);
+        // let temp = [];
+        // response.data.images.forEach((element) => {
+        //   if (!images.includes(element)) {
+        //     temp.push(element);
+        //   }
+        // });
+        // setimages([...temp]);
+        let artisanid = JSON.parse(props.match.params.data).id;
+        const { firebase } = props;
+        // setLoading(true);
+
+        firebase
+          .database()
+          .ref(`/artisan/${artisanid}/workplace`)
+          .once("value")
+          .then((snapshot) => {
+            console.log(snapshot.val());
+            snapshot.forEach((element) => {
+              console.log(element.val().downloadURL);
+              const data = element.val();
+              // this.setState({ workimages: this.state.workimages.concat(data) });
+              setimages((oldArray) => [...oldArray, data]);
+              // console.log(images)
+            });
+
+            // setLoading(false);
+            // ...
+          });
+
+        firebase
+          .database()
+          .ref(`/artisan/${artisanid}/sample_works`)
+          .once("value")
+          .then((snapshot) => {
+            console.log(snapshot.val());
+            snapshot.forEach((element) => {
+              console.log(element.val().downloadURL);
+              const data = element.val();
+              // this.setState({ workimages: this.state.workimages.concat(data) });
+              setSampleWorks((oldArray) => [...oldArray, data]);
+              // console.log(images)
+            });
+          });
       } catch (error) {
         console.log(error.message);
       }
@@ -207,7 +250,7 @@ const ServiceInfoPage = (props) => {
   }, []);
 
   // console.log(shop);
-  if (images && props.artisan && props.reviews) {
+  if (workimages && props.artisan && props.reviews) {
     const { bio, fname, lname, shop_location, services } = props.artisan;
     // console.log(reviews, "asdsa");
     // calulateOvrRating(props)
@@ -248,7 +291,7 @@ const ServiceInfoPage = (props) => {
               <div class="row">
                 <div class="col-md-3">
                   {/* <!-- Profile Image --> */}
-                  <div class="card card-primary card-outline">
+                  <div class="card  card-outline" style={{ borderTopColor: "#fe8704", borderTopWidth: "3px" }}>
                     <div class="card-body box-profile">
                       <div class="text-center">
                         <img class="profile-user-img img-fluid img-circle" src={avatar} alt="User profile picture" />
@@ -270,13 +313,13 @@ const ServiceInfoPage = (props) => {
                         <li class="list-group-item">
                           <b>Rating</b>{" "}
                           <a class="float-right">
-                            {sum}/5 ({props.reviews.length})
+                            {sum || 0}/5 ({props.reviews.length})
                           </a>
                         </li>
                       </ul>
 
-                      <button class="btn btn-primary btn-block" onClick={handleShow}>
-                        <b>Request service</b>
+                      <button class="btn bg-orange  btn-block" onClick={handleShow}>
+                        <b className="text-white">Request service</b>
                       </button>
                     </div>
                     {/* <!-- /.card-body --> */}
@@ -285,8 +328,8 @@ const ServiceInfoPage = (props) => {
 
                   {/* <!-- About Me Box --> */}
                   <div class="card card-primary">
-                    <div class="card-header">
-                      <h3 class="card-title">About Me</h3>
+                    <div class="card-header bg-orange">
+                      <h3 class="card-title text-white">About Me</h3>
                     </div>
                     {/* <!-- /.card-header --> */}
                     <div class="card-body">
@@ -370,7 +413,7 @@ const ServiceInfoPage = (props) => {
                                       <span className="float-right">
                                         <Ratings
                                           rating={data.rating}
-                                          widgetRatedColors="blue"
+                                          widgetRatedColors="#fe8704"
                                           // changeRating={changeRating}
                                           widgetDimensions="20px"
                                           widgetSpacings="15px"
@@ -419,13 +462,13 @@ const ServiceInfoPage = (props) => {
                               {/* <i class="fas fa-camera bg-purple"></i> */}
 
                               <div class="timeline-item">
-                                <h3 class="timeline-header">
-                                  <a href="#">My</a> workshop
+                                <h3 class="timeline-header ">
+                                  <a href="#" style={{color:"#fe8704"}}>My</a> workshop
                                 </h3>
 
                                 <div class="timeline-body">
-                                  {images.map((data) => (
-                                    <img src={data} alt="shop" height={100} width={100} />
+                                  {workimages.map((data) => (
+                                    <img src={data.downloadURL} alt="shop" height={100} width={100} />
                                   ))}
                                 </div>
                               </div>
@@ -441,12 +484,12 @@ const ServiceInfoPage = (props) => {
 
                               <div class="timeline-item">
                                 <h3 class="timeline-header">
-                                  <a href="#">My</a> sample works
+                                  <a href="#" style={{color:"#fe8704"}}>My</a> sample works
                                 </h3>
 
                                 <div class="timeline-body">
-                                  {images.map((data) => (
-                                    <img src={data} alt="shop" height={100} width={100} />
+                                  {sampleworks.map((data) => (
+                                    <img src={data.downloadURL} alt="shop" height={100} width={100} />
                                   ))}
                                 </div>
                               </div>
@@ -480,7 +523,7 @@ const ServiceInfoPage = (props) => {
                             <div class="form-group row float-right">
                               <Ratings
                                 rating={rating}
-                                widgetRatedColors="blue"
+                                widgetRatedColors="#fe8704"
                                 changeRating={changeRating}
                                 widgetDimensions="40px"
                                 widgetSpacings="15px"
@@ -494,7 +537,7 @@ const ServiceInfoPage = (props) => {
                             </div>
                             <div class="form-group row mt-5">
                               <div class="offset-sm-2 col-sm-10">
-                                <button type="submit" class="btn btn-primary text-white">
+                                <button type="submit" class="btn bg-orange text-white" style={{color:"white"}}>
                                   Submit
                                 </button>
                               </div>

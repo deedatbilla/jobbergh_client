@@ -1,12 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import Spinner from "../Components/Common/Spinner";
-import avatar from '../images/avatar.webp';
+import avatar from "../images/avatar.webp";
 
 const ProfileContent = (props) => {
+  const [loading, setLoading] = useState(false);
+  const uploadProfilePic = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const { firebase, details } = props;
+    const user = firebase.auth().currentUser;
+    // console.log(details.file,"hgh")
+    firebase.uploadFile(`clients/profile/${user.uid}`, details.file, `client/${user.uid}`).then((data) => {
+      console.log("File uploaded successfully", data);
+      //uploadTaskSnaphot
+
+      user
+        .updateProfile({
+          photoURL: data.File.downloadURL,
+        })
+        .then((data) => {
+          // Update successful.
+          console.log("profile updated");
+          // this.setState({})
+          setLoading(false);
+        })
+        .catch((error) => {
+          // An error happened.
+          console.log("profile update error");
+          setLoading(false);
+        });
+    });
+  };
   if (props.firebase) {
     const user = props.firebase.auth().currentUser;
     const { email, name, newpass, confirm } = props.details;
-    const { onChange,onSubmit } = props;
+    const { onChange, onSubmit, onFileChange } = props;
     return (
       <div className="content-wrapper">
         {/* <!-- Content Header (Page header) --> */}
@@ -37,25 +65,46 @@ const ProfileContent = (props) => {
                 <div class="card">
                   <div class="card-body">
                     <div class="e-profile">
-                      <div class="row">
-                        <div class="col-12 col-sm-auto mb-3">
-                          <div class="mx-auto" style={{ width: "140px" }}>
-                          <img class="profile-user-img img-fluid img-circle" src={avatar} alt="User profile picture" />
+                      <form onSubmit={uploadProfilePic}>
+                        <div class="row">
+                          <div class="col-12 col-sm-auto mb-3">
+                            <div class="mx-auto" style={{ width: "140px" }}>
+                              {user.photoURL ? (
+                                <img
+                                  class="profile-user-img  img-circle"
+                                  src={user.photoURL}
+                                  alt="User profile picture"
+                                  height={100}
+                                  width={100}
+                                />
+                              ) : (
+                                <img
+                                  class="profile-user-img img-fluid img-circle"
+                                  src={avatar}
+                                  height={100}
+                                  width={100}
+                                  alt="placeholder"
+                                />
+                              )}
+                            </div>
                           </div>
-                        </div>
-                        <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
-                          <div class="text-center text-sm-left mb-2 mb-sm-0">
-                            <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">{name}</h4>
-
-                            <div class="mt-2">
-                              <button class="btn btn-primary" type="button">
-                                <i class="fa fa-fw fa-camera"></i>
-                                <span>Change Photo</span>
-                              </button>
+                          <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+                            <div class="text-center text-sm-left mb-2 mb-sm-0">
+                              <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">{name}</h4>
+                              <div class=" mt-2">
+                                <input type="file" name="file" required onChange={onFileChange} />
+                              </div>
+                              <div class="mt-2">
+                                <button class="btn btn-primary text-white" type="submit">
+                                  <i class="fa fa-fw fa-camera"></i>
+                                  {!loading ? <span>Change Photo</span> : <span>Uploading...</span>}
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </form>
+                      
                       <ul class="nav nav-tabs">
                         <li class="nav-item">
                           <a href="" class="active nav-link">
@@ -133,7 +182,6 @@ const ProfileContent = (props) => {
                                         type="password"
                                         name="newpass"
                                         placeholder="••••••"
-                                        
                                         onChange={onChange}
                                       />
                                     </div>
@@ -150,14 +198,12 @@ const ProfileContent = (props) => {
                                         name="confirm"
                                         type="password"
                                         placeholder="••••••"
-                                        
                                         onChange={onChange}
                                       />
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                              
                             </div>
                             <div class="row">
                               <div class="col d-flex justify-content-end">

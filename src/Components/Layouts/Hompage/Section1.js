@@ -11,9 +11,9 @@ const Section1 = () => {
       <div className="container">
         <div className="row">
         
-          <div className="col-md-12 text-left">
+          {/* <div className="col-md-12 text-left">
             <h3 style={{ zIndex: 4 }}>Popular professional services</h3>
-          </div>
+          </div> */}
         </div>
         <div className="row">
           {/* <!-- Icon Box 7 --> */}

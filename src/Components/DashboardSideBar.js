@@ -24,7 +24,6 @@ class DashboardSideBar extends Component {
 
   onLogoutClick = (e) => {
     e.preventDefault();
-
     const { firebase } = this.props;
     firebase.logout();
   };
