@@ -262,7 +262,7 @@ const ServiceInfoPage = (props) => {
     return (
       <div>
         {ConfirmationModal()}
-        <SecondaryHeader auth={props.firebase.auth()} />
+        <SecondaryHeader auth={props.firebase.auth()} showSearch={true} />
 
         <div class="container">
           {/* <!-- Content Header (Page header) --> */}

@@ -88,13 +88,13 @@ class ManageRequestsPage extends Component {
                                           ? "badge badge-primary"
                                           : data.status === "complete"
                                           ? "badge badge-success"
-                                          : data.status === "awaiting client comfirmation"
+                                          : data.status === "awaiting client confirmation"
                                           ? "badge badge-warning"
                                           : null
                                       }
                                     >
-                                      {data.status === "awaiting client comfirmation"
-                                        ? "Waiting for you to comfirm completion of work"
+                                      {data.status === "awaiting client confirmation"
+                                        ? "Waiting for you to confirm completion of work"
                                         : data.status}
                                     </span>
                                   </td>
@@ -137,18 +137,18 @@ class ManageRequestsPage extends Component {
                                     </td>
                                   ) : null}
 
-                                  {data.status === "awaiting client comfirmation" ? (
+                                  {data.status === "awaiting client confirmation" ? (
                                     <td>
                                       <button
                                         className="btn btn-success btn-sm"
                                         onClick={async () => {
                                           const { firestore } = this.props;
                                           confirmAlert({
-                                            title: "Comfirm Completion",
-                                            message: "You are about to comfirm completion of this service",
+                                            title: "Confirm Completion",
+                                            message: "You are about to confirm completion of this service",
                                             buttons: [
                                               {
-                                                label: "Comfirm",
+                                                label: "Confirm",
                                                 onClick: async () => {
                                                   try {
                                                     await firestore.update(
@@ -169,7 +169,7 @@ class ManageRequestsPage extends Component {
                                           //   await firestore.u
                                         }}
                                       >
-                                        Comfirm service Completion
+                                        confirm service Completion
                                       </button>
                                     </td>
                                   ) : null}

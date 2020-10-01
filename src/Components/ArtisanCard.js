@@ -3,7 +3,7 @@ import avatar from "../images/avatar.webp";
 import placeholder from "../images/about_img.png";
 import { Link } from "react-router-dom";
 import { Carousel } from "react-bootstrap";
-import ArtisanCardShimmer from './ArtisanCardShimmer';
+import ArtisanCardShimmer from "./ArtisanCardShimmer";
 import axios from "axios";
 const ArtisanCard = (props) => {
   const [images, setimages] = useState([]);
@@ -39,30 +39,38 @@ const ArtisanCard = (props) => {
     };
     fetch();
   }, []);
-  const { fname, lname, shop_images, id, shop_location, bio,photoURL } = props.data;
+  const { fname, lname, shop_images, id, shop_location, bio, photoURL } = props.data;
   // console.log(JSON.stringify(shop_images));
   return (
     <div className="col-md-3">
       <div class="card shadow-lg mb-5 bg-white rounded">
-        {loading?<ArtisanCardShimmer/>:
-        <Carousel>
-          {images.map((data) => (
-            <Carousel.Item>
-              <img className="d-block w-100 " src={data.downloadURL} alt="First slide" />
-            </Carousel.Item>
-          ))}
-        </Carousel>}
+        {loading ? (
+          <ArtisanCardShimmer />
+        ) : (
+          <Carousel>
+            {images.map((data) => (
+              <Carousel.Item>
+                <img className="d-block w-100 " src={data.downloadURL} alt="First slide" />
+              </Carousel.Item>
+            ))}
+          </Carousel>
+        )}
         <div class="card-body">
           <div className="container">
             <div className="row">
-              <div className="col-md-2">
-              {!photoURL ? (
-                          <img class="profile-user-img img-fluid img-circle" src={avatar} alt="User profile picture" />
-                        ) : (
-                          <img class="profile-user-img img-fluid img-circle" src={photoURL} alt="User profile picture" />
-                        )}
+              <div className="col-3">
+                {!photoURL ? (
+                  <img
+                    class=" img-fluid img-circle"
+                    height={40} width={40}
+                    src={avatar}
+                    alt="User profile picture"
+                  />
+                ) : (
+                  <img src={photoURL} height={50} width={50} className="img-fluid img-circle" alt="user profile" />
+                )}
               </div>
-              <div className="col">
+              <div className="col-9">
                 <h6 class="text-muted">
                   {fname} {lname}
                 </h6>

@@ -23,7 +23,7 @@ const HomeHeader = () => {
                   <small class="txt-ligt-gray">Emaii Us</small>
                   <span class="fw-6 txt-blue">
                     <a href="#" class="txt-blue">
-                    info@localskilledworkersgh.com
+                    jobbergh@jobbergh.com
                     </a>
                   </span>
                 </div>
@@ -140,11 +140,11 @@ const HomeHeader = () => {
                 </a>
               </li>
              
-              <li class="nav-item">
+              {/* <li class="nav-item">
                 <a class="nav-link" href="services.html">
                   Services
                 </a>
-              </li>
+              </li> */}
              
               <li class="nav-item dropdown">
                 <a

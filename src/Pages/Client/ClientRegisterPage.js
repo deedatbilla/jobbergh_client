@@ -6,6 +6,7 @@ import { firebaseConnect } from "react-redux-firebase";
 import { notifyUser } from "../../actions/notifyActions";
 import { JOBBERGH_BASE_URL } from "../../config";
 import axios from "axios";
+import SecondaryHeader from '../../Components/SecondaryHeader';
 // import { Link } from "react-router-dom";
 // import HomeHeader from "./Layouts/Hompage/HomeHeader";
 import Alert from "../../Components/Common/Alert";
@@ -18,7 +19,7 @@ class ClientRegisterPage extends Component {
     loading: false,
     fname: "",
     lname: "",
-    comfirm: "",
+    confirm: "",
     agree: false,
     phone: "",
   };
@@ -44,9 +45,9 @@ class ClientRegisterPage extends Component {
     e.preventDefault();
     this.setState({ loading: true });
     const { firebase, notifyUser, firestore, history } = this.props;
-    const { email, password, comfirm, fname, lname, agree, phone } = this.state;
+    const { email, password, confirm: confirm, fname, lname, agree, phone } = this.state;
     try {
-      if (password === comfirm) {
+      if (password === confirm) {
         if (agree) {
           const userdata = { email, password, fname, lname, phone };
 
@@ -72,10 +73,11 @@ class ClientRegisterPage extends Component {
   };
   render() {
     const { message, messageType } = this.props.notify;
-    const { email, password, loading, agree, fname, lname, comfirm, phone } = this.state;
+    const { email, password, loading, agree, fname, lname, confirm: confirm, phone } = this.state;
     return (
       <div className="">
         {/* <Header/> */}
+        <SecondaryHeader auth={this.props.firebase.auth()} showSearch={false} />
         {/* //free-quote free-quote-alt pb-0 */}
         <section class="wide-tb-100 bg-fixed">
           <div class="container">
@@ -147,10 +149,10 @@ class ClientRegisterPage extends Component {
                       <input
                         type="password"
                         onChange={this.onChange}
-                        value={comfirm}
-                        name="comfirm"
+                        value={confirm}
+                        name="confirm"
                         class="form-control"
-                        placeholder="Comfirm password"
+                        placeholder="confirm password"
                       />
                     </div>
                     <div className="row">

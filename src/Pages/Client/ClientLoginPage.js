@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { firebaseConnect } from "react-redux-firebase";
 import { notifyUser } from "../../actions/notifyActions";
 import { Link } from "react-router-dom";
-// import HomeHeader from "./Layouts/Hompage/HomeHeader";
+import SecondaryHeader from "../../Components/SecondaryHeader";
 import Alert from "../../Components/Common/Alert";
 
 class LoginPage extends Component {
@@ -51,8 +51,9 @@ class LoginPage extends Component {
     const { email, password, loading } = this.state;
     return (
       <div className="">
-        {/* <Header/> */}
-        <section class="wide-tb-100 bg-fixed free-quote free-quote-alt pb-0">
+       <SecondaryHeader auth={this.props.firebase.auth()} showSearch={false} />
+
+        <section class="wide-tb-100  pb-0">
           <div class="container">
             <div class="row">
               <div class="col-lg-5 col-md-7">
@@ -120,15 +121,15 @@ class LoginPage extends Component {
                         </Link>
                       </div>
                     </div>
-                    <div className="social-auth-links text-center mb-3">
-                      <p>- OR -</p>
+                    {/* <div className="social-auth-links text-center mb-3">
+                      <p>- OR -</p> */}
                       {/* <a href="#" className="btn btn-block btn-primary">
                   <i className="fab fa-facebook mr-2"></i> Sign in using Facebook
                 </a> */}
-                      <a href="#!" onClick={this.signInWithGoogle} className="btn btn-block text-white" style={{backgroundColor:"#d34836"}}>
+                      {/* <a href="#!" onClick={this.signInWithGoogle} className="btn btn-block text-white" style={{backgroundColor:"#d34836"}}>
                         <i className="fab fa-google-plus mr-2 text-white"></i> Sign in using Google+
                       </a>
-                    </div>
+                    </div> */}
                   </form>
                   {/* <!-- Free Quote From --> */}
                 </div>
